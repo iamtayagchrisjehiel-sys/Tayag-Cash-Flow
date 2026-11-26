@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Cash Flow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#17130F;--cc:#2C2117;--br:#453221;--am:#D99A48;--gd:#F1C779;--ch:#F5DCA8;--cr:#FAF3E7;--mu:#B8A48B;--tc:#C47754;--sg:#8EAA85;--ln:rgba(245,220,168,.12);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--cr);font:400 15px/1.45 Manrope,system-ui,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 90% 40% at 50% 0,rgba(217,154,72,.16),transparent 70%);pointer-events:none}
+#app{position:relative;max-width:520px;margin:0 auto;padding:16px 20px 110px}
+button,select,input,textarea{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.logo{font:600 22px 'Cormorant Garamond',Georgia,serif;color:var(--ch);letter-spacing:.02em}
+.sel{background:var(--cc);border:1px solid var(--ln);border-radius:10px;padding:7px 8px;font-size:13px;color:var(--ch)}
+.gear{font-size:20px;color:var(--mu);padding:4px 8px}
+.hero{text-align:center;padding:44px 0 30px;position:relative}
+.hero:before{content:"";position:absolute;left:50%;top:50%;width:300px;height:200px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(217,154,72,.28),transparent);z-index:-1}
+.lbl{font-size:11px;letter-spacing:.16em;color:var(--mu);text-transform:uppercase}
+.big{font:500 clamp(44px,14vw,60px)/1.1 'Cormorant Garamond',Georgia,serif;color:var(--cr);margin-top:6px}
+.ov{display:flex;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);padding:14px 0}
+.ov div{flex:1;text-align:center}.ov div+div{border-left:1px solid var(--ln)}
+.ov b{display:block;font-weight:600;font-size:15px;margin-top:2px}
+.bar{height:5px;border-radius:5px;background:var(--cc);margin:16px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--am),var(--ch))}
+.act{display:flex;gap:12px;margin:22px 0}
+.btn{flex:1;padding:14px;border-radius:14px;font-weight:600;text-align:center}
+.pri{background:linear-gradient(135deg,#B9772E,var(--am) 55%,var(--gd));color:var(--bg);box-shadow:0 6px 20px rgba(217,154,72,.22)}
+.sec{background:var(--cc);border:1px solid rgba(217,154,72,.45);color:var(--ch)}
+.hd{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 8px}
+.hd h2{font:600 22px 'Cormorant Garamond',Georgia,serif;color:var(--ch)}
+.lk{color:var(--am);font-size:13px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--ln);cursor:pointer}
+.ic{width:38px;height:38px;border-radius:12px;background:var(--cc);display:grid;place-items:center;font-style:normal;font-size:17px;flex:none}
+.m{flex:1;min-width:0}.m b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+small{color:var(--mu);font-size:12px}
+.income{color:var(--ch)}.expense{color:var(--tc)}.savings{color:var(--gd)}
+.row span{font-weight:600;font-size:14px;white-space:nowrap}
+.empty{text-align:center;padding:34px 10px;color:var(--mu)}.empty b{display:block;color:var(--cr);font-weight:500}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;background:rgba(23,19,15,.94);border-top:1px solid var(--ln);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav div{display:flex;width:100%;max-width:520px}
+nav button{flex:1;color:var(--mu);font-size:11px;padding:4px}nav button span{display:block;font-size:20px}nav .on{color:var(--gd)}
+.grp{font-size:12px;color:var(--mu);margin:18px 0 2px;display:flex;justify-content:space-between}
+.chips{display:flex;gap:6px;margin:12px 0}.chips button{flex:1;padding:8px;border-radius:10px;background:var(--cc);color:var(--mu);font-size:13px;border:1px solid transparent}.chips .on{color:var(--bg);background:var(--ch)}
+input,select.f,textarea{width:100%;background:var(--bg);border:1px solid var(--br);border-radius:12px;padding:12px;margin:5px 0 12px;outline:0}
+input:focus,textarea:focus,select:focus{border-color:var(--gd);box-shadow:0 0 0 3px rgba(241,199,121,.15)}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9;display:flex;align-items:flex-end;justify-content:center}
+.sh{background:var(--cc);width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(217,154,72,.35);animation:up .25s ease}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 14px}
+.grid button{background:var(--bg);border:1px solid var(--br);border-radius:12px;padding:12px;text-align:left}.grid .on{border-color:var(--gd);color:var(--gd)}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:16px 10px;padding:6px 0}.st b{display:block;font:500 24px 'Cormorant Garamond',Georgia,serif}
+.cat{padding:9px 0}.cat .t{display:flex;justify-content:space-between;font-size:14px}
+.sc{overflow-x:auto}.ch{display:flex;gap:6px;align-items:flex-end;height:130px;min-width:420px;border-bottom:1px solid var(--br)}
+.ch div{flex:1;display:flex;gap:2px;align-items:flex-end;height:100%;cursor:pointer}.ch i{flex:1;border-radius:3px 3px 0 0;transition:height .6s}
+.mo{display:flex;min-width:420px;gap:6px;font-size:11px;color:var(--mu)}.mo span{flex:1;text-align:center}
+.flow{display:flex;align-items:center;font-size:11px;text-align:center;margin:8px 0}
+.nd{flex:1;padding:8px 2px;border:1px solid var(--am);border-radius:12px;background:var(--cc)}.nd b{display:block;font-size:11px;color:var(--gd)}
+.fl{width:10px;height:1px;background:var(--am);flex:none}
+.mr{display:grid;grid-template-columns:34px 1fr 1fr 1fr 1fr;gap:4px;font-size:12px;padding:8px 0;border-bottom:1px solid var(--ln);cursor:pointer;text-align:right}.mr span:first-child{text-align:left;color:var(--mu)}
+.ring{display:grid;place-items:center;margin:20px 0;position:relative}.ring>div{position:absolute;text-align:center}
+.link{color:var(--am);padding:8px 0;font-size:13px}
+</style></head><body><div id="app"></div><nav><div id="nav"></div></nav><div id="sh"></div>
+<script>
+const EC={Food:'🍽',Transport:'🚌',Boarding:'🏠',School:'📚','Load / Data':'📱',Personal:'✦',Other:'•'},IS=['Allowance','Gift','Work income','Other'];
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let S={tx:[],goal:0,cur:'₱'},Y=2026,M=new Date().getMonth(),tab='home',F={q:'',cat:'',type:'',mo:-2,yr:0,grp:'day',open:0},rs=0;
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('cf1')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('cf1',JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const fmt=n=>(n<0?'−':'')+S.cur+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const inP=(t,y,m)=>+t.date.slice(0,4)==y&&(m<0||+t.date.slice(5,7)-1==m);
+const sel=(y,m)=>S.tx.filter(t=>inP(t,y,m));
+const tot=l=>{let i=0,e=0,s=0;l.forEach(t=>t.type=='income'?i+=t.amt:t.type=='expense'?e+=t.amt:s+=t.amt);return{i,e,s,b:i-e-s}};
+const dt=d=>{const x=new Date(d+'T00:00');return MN[x.getMonth()]+' '+x.getDate()+', '+x.getFullYear()};
+const ico=t=>t.type=='income'?'＋':t.type=='savings'?'◈':(EC[t.cat]||'•');
+const today=()=>{const n=new Date();if(n.getFullYear()==Y&&(M<0||n.getMonth()==M))return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');return Y+'-'+String(M<0?1:M+1).padStart(2,'0')+'-01'};
+function row(t){return `<div class=row onclick="openForm('${t.type}','${t.id}')"><i class=ic>${ico(t)}</i><div class=m><b>${t.note||t.cat}</b><small>${t.cat} · ${dt(t.date)}</small></div><span class=${t.type}>${t.type=='income'?'+':'−'}${fmt(t.amt)}</span></div>`}
+const empty='<div class=empty><b>Nothing here yet.</b>Your money activity will appear here.</div>';
+function head(){return `<div class=top><span class=logo>Cash Flow</span><span><select class=sel onchange="M=+this.value;draw()"><option value=-1 ${M<0?'selected':''}>All months</option>${MN.map((m,i)=>`<option value=${i} ${i==M?'selected':''}>${m}</option>`).join('')}</select> <select class=sel onchange="Y=+this.value;draw()">${[2025,2026,2027,2028].map(y=>`<option ${y==Y?'selected':''}>${y}</option>`).join('')}</select><button class=gear onclick="settings()">⚙</button></span></div>`}
+function per(){const n=new Date(),L=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),t=L(n),w=new Date(n);w.setDate(n.getDate()-((n.getDay()+6)%7));const ws=L(w),ms=t.slice(0,7);
+const R=[['Daily','Today',x=>x.date==t],['Weekly','This week',x=>x.date>=ws&&x.date<=t],['Monthly','This month',x=>x.date.slice(0,7)==ms]];
+return `<div class=hd><h2>Money in and out</h2></div>`+R.map(r=>{const T=tot(S.tx.filter(r[2]));return `<div class=row style="cursor:default"><div class=m><b>${r[0]}</b><small>${r[1]}</small></div><span class=income>+${fmt(T.i)}</span><span class=expense>−${fmt(T.e)}</span></div>`}).join('')}
+function home(){const l=sel(Y,M),T=tot(l),p=T.i>0?Math.min(100,T.e/T.i*100):0,r=l.slice().sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,5);
+return head()+`<div class=hero><div class=lbl>Available balance</div><div class=big>${fmt(T.b)}</div></div>
+<div class=ov><div><small>Income</small><b class=income>${fmt(T.i)}</b></div><div><small>Expenses</small><b class=expense>${fmt(T.e)}</b></div><div><small>Savings</small><b class=savings>${fmt(T.s)}</b></div></div>
+<div class=bar><i style="width:${p}%"></i></div><small>${Math.round(p)}% of income spent</small>
+<div class=act><button class="btn pri" onclick="openForm('income')">+ Add Money</button><button class="btn sec" onclick="openForm('expense')">− Add Expense</button></div>
+${per()}<div class=hd><h2>Recent activity</h2><button class=lk onclick="go('activity')">See all</button></div>${r.length?r.map(row).join(''):empty}`}
+function activity(){let l=S.tx.filter(t=>{const y=+t.date.slice(0,4),m=+t.date.slice(5,7)-1;return (F.yr?y==F.yr:y==Y)&&(F.mo==-2?(M<0||m==M):F.mo<0||m==F.mo)&&(!F.type||t.type==F.type)&&(!F.cat||t.cat==F.cat)&&(!F.q||(t.note+' '+t.cat).toLowerCase().includes(F.q.toLowerCase()))}).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+const key=d=>{if(F.grp=='month')return d.slice(0,7);if(F.grp=='day')return d;const x=new Date(d+'T00:00');x.setDate(x.getDate()-((x.getDay()+6)%7));return 'Week of '+x.toISOString().slice(0,10)};
+const g={};l.forEach(t=>(g[key(t.date)]=g[key(t.date)]||[]).push(t));
+const cats=[...new Set([...Object.keys(EC),...IS,'Savings'])];
+return head()+`<div class=hd><h2>Activity</h2><button class=lk onclick="F.open=!F.open;draw()">Filters ${F.open?'▴':'▾'}</button></div>
+<input id=q placeholder="Search" value="${F.q}" oninput="F.q=this.value;clearTimeout(rs);rs=setTimeout(()=>{draw();$('#q').focus()},250)">
+<div class=chips>${['day','week','month'].map(k=>`<button class="${F.grp==k?'on':''}" onclick="F.grp='${k}';draw()">${k[0].toUpperCase()+k.slice(1)}ly`.replace('Dayly','Daily')+'</button>').join('')}</div>
+${F.open?`<select class=f onchange="F.mo=+this.value;draw()"><option value=-2>Selected month</option><option value=-1 ${F.mo==-1?'selected':''}>All months</option>${MN.map((m,i)=>`<option value=${i} ${F.mo==i?'selected':''}>${m}</option>`).join('')}</select>
+<select class=f onchange="F.yr=+this.value;draw()"><option value=0>Selected year</option>${[2025,2026,2027,2028].map(y=>`<option ${F.yr==y?'selected':''}>${y}</option>`).join('')}</select>
+<select class=f onchange="F.cat=this.value;draw()"><option value="">All categories</option>${cats.map(c=>`<option ${F.cat==c?'selected':''}>${c}</option>`).join('')}</select>
+<select class=f onchange="F.type=this.value;draw()"><option value="">All types</option>${['income','expense','savings'].map(c=>`<option ${F.type==c?'selected':''}>${c}</option>`).join('')}</select>`:''}
+${l.length?Object.keys(g).sort().reverse().map(k=>{const T=tot(g[k]);return `<div class=grp><span>${/^\d{4}-\d\d$/.test(k)?MN[+k.slice(5)-1]+' '+k.slice(0,4):/^\d/.test(k)?dt(k):k}</span><span>${fmt(T.i)} in · ${fmt(T.e)} out</span></div>`+g[k].map(row).join('')}).join(''):empty}`}
+function stats(){const l=sel(Y,M),T=tot(l),ex=l.filter(t=>t.type=='expense'),mx=Math.max(1,...MN.map((_,m)=>{const a=tot(sel(Y,m));return Math.max(a.i,a.e)})),
+cs=Object.keys(EC).map(c=>({c,v:ex.filter(t=>t.cat==c).reduce((a,t)=>a+t.amt,0)})),col=['#F1C779','#D99A48','#C47754','#8EAA85','#B8A48B','#F5DCA8','#453221'];
+const A=tot(sel(Y,-1));
+return head()+`<div class=hd><h2>Statistics</h2></div><div class=st><div><small>Total income</small><b class=income>${fmt(T.i)}</b></div><div><small>Total expenses</small><b class=expense>${fmt(T.e)}</b></div><div><small>Total savings</small><b class=savings>${fmt(T.s)}</b></div><div><small>Remaining balance</small><b>${fmt(T.b)}</b></div></div>
+<div class=hd><h2>Income vs expenses, ${Y}</h2></div><div class=sc><div class=ch>${MN.map((_,m)=>{const a=tot(sel(Y,m));return `<div onclick="$('#tip').textContent='${MN[m]}: in ${fmt(a.i)} · out ${fmt(a.e)}'"><i style="height:${a.i/mx*100}%;background:var(--ch)"></i><i style="height:${a.e/mx*100}%;background:var(--tc)"></i></div>`}).join('')}</div><div class=mo>${MN.map(m=>`<span>${m}</span>`).join('')}</div></div><small id=tip>Tap a month for exact values.</small>
+<div class=hd><h2>Expense breakdown</h2></div>${cs.map((x,i)=>`<div class=cat><div class=t><span>${EC[x.c]} ${x.c}</span><span>${fmt(x.v)} · ${T.e?Math.round(x.v/T.e*100):0}%</span></div><div class=bar style="margin:6px 0 0;height:4px"><i style="width:${T.e?x.v/T.e*100:0}%;background:${col[i]}"></i></div></div>`).join('')}
+<div class=hd><h2>Cash flow</h2></div><div class=flow><div class=nd><b>Income</b>${fmt(T.i)}</div><i class=fl></i><div class=nd><b>Available</b>${fmt(T.i)}</div><i class=fl></i><div class=nd><b>Spent / Saved</b>${fmt(T.e)} / ${fmt(T.s)}</div><i class=fl></i><div class=nd><b>Remaining</b>${fmt(T.b)}</div></div>
+<div class=hd><h2>Annual overview ${Y}</h2></div><div class=mr style="cursor:default"><span></span><span>Income</span><span>Expenses</span><span>Savings</span><span>Left</span></div>
+${MN.map((n,m)=>{const a=tot(sel(Y,m));return `<div class=mr onclick="M=${m};go('home')"><span>${n}</span><span class=income>${a.i.toFixed(0)}</span><span class=expense>${a.e.toFixed(0)}</span><span class=savings>${a.s.toFixed(0)}</span><span>${a.b.toFixed(0)}</span></div>`}).join('')}
+<div class=mr style="cursor:default;font-weight:600;color:var(--cr)"><span>All</span><span class=income>${A.i.toFixed(0)}</span><span class=expense>${A.e.toFixed(0)}</span><span class=savings>${A.s.toFixed(0)}</span><span>${A.b.toFixed(0)}</span></div>`}
+function savings(){const yr=tot(sel(Y,-1)).s,mo=M<0?yr:tot(sel(Y,M)).s,p=S.goal>0?Math.min(1,yr/S.goal):0,C=2*Math.PI*80,l=sel(Y,-1).filter(t=>t.type=='savings').sort((a,b)=>b.date.localeCompare(a.date));
+return head()+`<div class=hd><h2>Savings</h2></div><div class=ring><svg width=190 height=190 viewBox="0 0 190 190"><defs><linearGradient id=g><stop offset=0 stop-color="#D99A48"/><stop offset=1 stop-color="#F5DCA8"/></linearGradient></defs><circle cx=95 cy=95 r=80 fill=none stroke="#2C2117" stroke-width=10 /><circle cx=95 cy=95 r=80 fill=none stroke="url(#g)" stroke-width=10 stroke-linecap=round stroke-dasharray="${C}" stroke-dashoffset="${C*(1-p)}" transform="rotate(-90 95 95)" style="transition:stroke-dashoffset .8s"/></svg><div><div class=big style="font-size:34px;margin:0">${Math.round(p*100)}%</div><small>${S.goal?'of '+fmt(S.goal):'No goal set'}</small></div></div>
+<div class=st><div><small>${M<0?'Saved (all months)':'Saved this month'}</small><b class=savings>${fmt(mo)}</b></div><div><small>Saved this year</small><b class=savings>${fmt(yr)}</b></div></div>
+<div class=act><button class="btn pri" onclick="openForm('savings')">Record savings</button><button class="btn sec" onclick="goal()">${S.goal?'Edit goal':'Set goal'}</button></div>
+${S.goal?'<button class=link onclick="S.goal=0;save();draw()">Remove goal</button>':''}<div class=hd><h2>Entries</h2></div>${l.length?l.map(row).join(''):empty}`}
+function draw(){$('#app').innerHTML={home,activity,stats,savings}[tab]();$('#nav').innerHTML=[['home','⌂','Home'],['activity','☰','Activity'],['stats','▥','Stats'],['savings','◈','Savings']].map(x=>`<button class="${tab==x[0]?'on':''}" onclick="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join('')}
+function go(t){tab=t;draw();scrollTo(0,0)}
+const closeSh=()=>$('#sh').innerHTML='';
+function sheet(h){$('#sh').innerHTML=`<div class=sheet onclick="if(event.target==this)closeSh()"><div class=sh>${h}</div></div>`}
+let D={};
+function openForm(type,id){const t=id?S.tx.find(x=>x.id==id):null;D=t?{...t}:{type,cat:type=='expense'?'Food':type=='income'?'Allowance':'Savings',date:today()};if(t)type=t.type;
+const title={income:'Add money',expense:'Add expense',savings:'Record savings'}[type];
+sheet(`<h2 class=logo style="margin-bottom:10px">${t?'Edit entry':title}</h2><label class=lbl>Amount (${S.cur})</label><input id=a type=number inputmode=decimal min=0 step=0.01 placeholder="0.00" value="${t?t.amt:''}">
+<label class=lbl>Date</label><input id=d type=date value="${D.date}">
+${type=='expense'?`<label class=lbl>Category</label><div class=grid>${Object.keys(EC).map(c=>`<button class="${D.cat==c?'on':''}" onclick="D.cat='${c}';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">${EC[c]} ${c}</button>`).join('')}</div>`:type=='income'?`<label class=lbl>Source</label><select class=f id=s>${IS.map(c=>`<option ${D.cat==c?'selected':''}>${c}</option>`).join('')}</select>`:''}
+<label class=lbl>${type=='savings'?'Description':'Note (optional)'}</label><input id=n value="${t?t.note:''}" placeholder="Optional">
+<button class="btn pri" style="width:100%" onclick="saveTx('${type}','${id||''}')">Save</button>${t?`<button class=link style="width:100%;color:var(--tc)" onclick="del('${id}')">Delete entry</button>`:''}<small id=er style="color:var(--tc)"></small>`)}
+function saveTx(type,id){const a=parseFloat($('#a').value),d=$('#d').value;if(!(a>0)||!d){$('#er').textContent='Enter an amount above 0 and a date.';return}
+const t={id:id?+id:Date.now(),type,amt:Math.round(a*100)/100,date:d,note:$('#n').value.trim(),cat:type=='income'?$('#s').value:type=='savings'?'Savings':D.cat};
+if(id)S.tx=S.tx.map(x=>x.id==id?t:x);else S.tx.push(t);Y=+d.slice(0,4);save();closeSh();draw()}
+function del(id){S.tx=S.tx.filter(x=>x.id!=id);save();closeSh();draw()}
+function goal(){sheet(`<h2 class=logo style="margin-bottom:10px">Savings goal</h2><label class=lbl>Goal for ${Y} (${S.cur})</label><input id=g type=number inputmode=decimal min=0 value="${S.goal||''}"><button class="btn pri" style="width:100%" onclick="S.goal=Math.max(0,parseFloat($('#g').value)||0);save();closeSh();draw()">Save goal</button>`)}
+function settings(){sheet(`<h2 class=logo style="margin-bottom:10px">Settings</h2><label class=lbl>Currency symbol</label><input id=c value="${S.cur}" maxlength=4 onchange="S.cur=this.value||'₱';save();draw()">
+<label class=lbl>Backup and restore</label><textarea id=bk rows=4 placeholder="Tap Backup, copy the text, keep it safe. Paste it here to restore."></textarea>
+<div class=act style="margin:0 0 8px"><button class="btn sec" onclick="$('#bk').value=JSON.stringify(S);$('#bk').select();try{navigator.clipboard.writeText($('#bk').value)}catch(e){}">Backup</button><button class="btn sec" onclick="try{const o=JSON.parse($('#bk').value);if(!Array.isArray(o.tx))throw 0;S=Object.assign({tx:[],goal:0,cur:'₱'},o);save();closeSh();draw()}catch(e){this.textContent='Invalid backup'}">Restore</button></div>
+<button class=link style="color:var(--tc)" onclick="if(this.dataset.s){S={tx:[],goal:0,cur:'₱'};save();closeSh();draw()}else{this.dataset.s=1;this.textContent='Tap again to erase everything'}">Reset all data</button>`)}
+draw();
+</script></body></html>
